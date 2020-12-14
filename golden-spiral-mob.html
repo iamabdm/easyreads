@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+if (screen.width>699) {
+document.location="golden-spiral";
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YVB98XEM4"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-5YVB98XEM4');
+</script>
+<link rel="icon" href="https://user-images.githubusercontent.com/72780530/102049035-2a93fe80-3e06-11eb-811d-f02987233f97.png" type="image/png" type="image/png" sizes="32x32">
+<title>Golden Spiral | Tenced</title>
+<meta property="og:title" content="Golden Spiral">
+<meta property="og:description" content="Learn to find the Golden Ratio">
+<meta property="og:image" content="https://1.bp.blogspot.com/-rOsMYK2YmU4/X75oVLq_H-I/AAAAAAAAAeM/konlaY7B0koyqjgTQNFe8W-oMEuaJj4OwCLcBGAsYHQ/77.webp">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1 class="title">Golden Spiral</h1>
+<style>
+html, body {
+  margin: 0;
+}
+.title{font-size:36px;position:fixed;left:20%;top:-2%;height:30px;width:100%;color:#000;}
+canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+}
+</style>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.8/p5.min.js'></script>
+<script>
+let golden = 1.325;
+let skipArc;
+let drawSquares;
+let w, h;
+function setup() {
+  drawSquares = false;
+  setwh();
+  createCanvas(w, h);
+  cursor(HAND);
+}
+function draw() {
+  background("white");
+  noLoop();
+  noFill();
+  let recursions = 9;
+  skipArc = true;
+  let margin = 10;
+  drawArc(margin, margin, h - margin * 2, recursions);
+}
+function setwh() {
+  let w0 = windowHeight * golden;
+  let h0 = windowWidth / golden;
+  if (w0 > windowWidth) {
+    h = h0;
+    w = h0 * golden;
+  } else if (h0 > windowHeight) {
+    w = w0;
+    h = w0 / golden;
+  }
+}
+function windowResized() {
+  setwh();
+  resizeCanvas(w, h);
+}
+function drawArc(x, y, height, level) {
+  if (level === 0) return;
+  let b = height;
+  let a = b * golden;
+  let c = b / golden;
+  let e = a - c;
+  let d = e / golden;
+
+  if (drawSquares) {
+    stroke(20, 5);
+    rect(x, y, a, height);
+    rect(x, y, c, height);
+    rect(x + c, y, e, d);
+    rect(x + c, y + d, e, e);
+    stroke("black");
+  }
+  if (!skipArc) {
+    let d1 = e * 1.41;
+    arc(x + c * 0.625, y + d + e * 0.499, d1, d1, -PI / 4, PI / 4);
+  }
+  skipArc = false;
+  let d2 = e * 0.81;
+  arc(x + c + e * 0.2855, y + d * 0.619, d2, d2, -3 * PI / 2 - PI / 4, -3 * PI / 2 + PI / 4);
+  push();
+  translate(x, y + b);
+  rotate(-HALF_PI);
+  drawArc(0, 0, c, level - 1);
+  pop();
+  drawArc(x + c, y, d, level - 1);
+}
+function mouseClicked() {
+  drawSquares = !drawSquares;
+  draw();
+}</script>
+</body>
+</html>
