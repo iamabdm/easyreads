@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YVB98XEM4"></script>
+<script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-5YVB98XEM4');
+</script>
+<link rel="icon" href="https://user-images.githubusercontent.com/72780530/102049035-2a93fe80-3e06-11eb-811d-f02987233f97.png" type="image/png" sizes="32x32">
+<title>Forest-fire management | Tenced</title>
+<meta name="theme-color" content="#00ff00">
+<meta property="og:title" content="Forest-fire management">
+<meta property="og:description" content="Learn Forest-fire management with interaction.">
+<meta property="og:image" content="https://1.bp.blogspot.com/-Xq2TmE3Vkf0/X75oTXPJOvI/AAAAAAAAAd0/6mvgB1tcNQA-not1-fU9h-YEidOgCSSWwCLcBGAsYHQ/11.webp">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+            html {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+            }
+
+            body {
+                display: none;
+                overflow: hidden;
+                font-family: sans-serif;
+            }
+
+            #box {
+                background-color: lightgoldenrodyellow;
+                border: 1px solid lightgrey;
+                bottom: 0;
+                position: absolute;
+                right: 0;
+                width: 420px;
+                z-index: 1;
+            }
+
+            #content {
+                padding: 15px;
+            }
+
+            #content p {
+                margin-top: 0;
+            }
+
+            #button a {
+                display: block;
+                padding: 15px;
+                border-bottom: 1px solid lightgrey;
+            }
+
+            table {
+                border-collapse: separate;
+            }
+
+            td {
+                padding: 15px 0 15px 15px;
+            }
+
+            th {
+                text-align: left;
+                padding: 15px 15px 15px 0;
+                border-right: 1px solid lightgrey;
+            }
+
+            #c {
+                left: 0;
+                position: absolute;
+                top: 0;
+                z-index: 0;
+            }
+
+            a {
+                color: blue;
+                text-decoration: none;
+            }
+::-moz-selection {
+  color:#fff;
+  background:#008000;
+}
+::selection {
+  color:#fff;
+  background:#008000;
+}
+</style>
+<script> 
+      var utils = {
+        create2DArray: function(rows, cols, initVal) {
+          var res = new Array(rows);
+          for (var row = 0; row < rows; row++) {
+            res[row] = new Array(cols);
+            for (var col = 0; col < cols; col++) {
+        res[row][col] = initVal;
+            }
+          }
+          return res;
+        },
+
+
+        mod: function(n, p) {
+          if (n < 0) {
+            return p + n % p;
+          } else {
+            return n % p;
+          }
+        },
+      };
+    </script>
+
+    <body>
+        <div id="box">
+  <div id="button">
+    <a href="#" id="toggleBox"></a>
+  </div>
+
+  <div id="content">
+<p>
+The green cells are trees, the black cells are empty spaces, and the red cells are trees that are on fire. Fires are started through <a href="http://en.wikipedia.org/wiki/Wildfire#Causes">lightning</a>. When a tree is on fire, it will die and spread the fire to trees in its <a href="http://en.wikipedia.org/wiki/Moore_neighborhood">Moore neighborhood</a> in the next step.
+</p>
+<p>
+For a given step, P<sub>growth</sub> is the probability of a tree growing in an empty space and P<sub>lightning</sub> is the probability of lightning striking a tree.
+</p>
+<table>
+      <tr>
+        <th rowspan="2">Controls</th>
+        <td>
+          <label for="pGrowth">P<sub>growth</sub>:</label>
+        </td>
+        <td>
+          <input id="pGrowth" type="range" min="0" max="0.01" step="0.0000001" />
+        </td>
+        <td id="pGrowthValue"></td>
+      </tr>
+      <tr>
+        <td>
+          <label for="pLightning">P<sub>lightning</sub>:</label>
+        </td>
+        <td>
+          <input id="pLightning" type="range" min="0" max="0.01" step="0.0000001" />
+        </td>
+        <td id="pLightningValue"></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<canvas id="c">
+  <p>
+    It looks like your browser
+    lacks <a href="http://en.wikipedia.org/wiki/Canvas_element">canvas</a>
+    support.
+  </p>
+</canvas>
+
+
+<script type="text/javascript">
+  (function() {
+
+    var rgb = function(r, g, b) {
+      for (var i = 0; i < arguments.length; i++) {
+        if (arguments[i] < 0 || arguments[i] > 255) {
+          throw new RangeError("Color components must be in the range [0, 255].");
+        }
+      }
+      return {r: r, g: g, b: b};
+    }
+
+    var CELL_SIZE = 8;
+
+    // States.
+    var STATES = {
+      EMPTY: 0,
+      TREE: 1,
+      BURNING: 2,
+    };
+
+    var COLORS = {};
+    COLORS[STATES.EMPTY] = rgb(0, 0, 0);
+    COLORS[STATES.TREE] = rgb(0, 255, 0);
+    COLORS[STATES.BURNING] = rgb(255, 0, 0);
+
+    var ROWS = Math.ceil(window.innerHeight / CELL_SIZE);
+    var COLS = Math.ceil(window.innerWidth / CELL_SIZE);
+
+    var INITIAL_P_TREES = 0.4;
+    var pGrowth = 5e-3;
+    var pLightning = 1e-5;
+
+    var NEIGHBORS = [
+      [-1, -1], [+0, -1], [+1, -1],
+      [-1, +0], /* :-) */ [+1, +0],
+      [-1, +1], [+0, +1], [+1, +1],
+    ];
+
+    // Returns true any trees in the 8-neighborhood of (row, col) are
+    // on fire.
+    var neighborhoodOnFire = function(data, row, col) {
+      for (var i = 0; i < NEIGHBORS.length; i++) {
+        var neighborRow = utils.mod(row + NEIGHBORS[i][1], data.length);
+        var neighborCol = utils.mod(col + NEIGHBORS[i][0], data[0].length);
+        if (data[neighborRow][neighborCol] === STATES.BURNING) {
+          return true;
+        }
+      }
+      return false;
+    }
+    // Executes one step of the system with the given
+    // probabilities. The input array is not modified. A new array
+    // containing the modifications is returned.
+    var update = function(data, pGrowth, pLightning) {
+      if (data.length === 0) {
+        return [];
+      }
+      var newData = utils.create2DArray(data.length, data[0].length);
+      for (var row = 0; row < data.length; row++) {
+        for (var col = 0; col < data[row].length; col++) {
+          var currentState = data[row][col];
+          var newState = STATES.EMPTY;
+
+          switch (currentState) {
+            case STATES.EMPTY:
+              newState = Math.random() < pGrowth ? STATES.TREE : STATES.EMPTY;
+              break;
+            case STATES.TREE:
+              if (neighborhoodOnFire(data, row, col) || Math.random() < pLightning) {
+                newState = STATES.BURNING;
+              } else {
+                newState = STATES.TREE;
+              }
+              break;
+            case STATES.BURNING:
+              newState = STATES.EMPTY;
+              break;
+           }
+
+           newData[row][col] = newState;
+        }
+      }
+      return newData;
+    }
+    // Creates a new canvas and returns its context.
+    var createCanvas = function(height, width) {
+      var canvas = document.getElementById("c");
+      var context = canvas.getContext("2d");
+      context.canvas.height = height;
+      context.canvas.width = width;
+      return context;
+    }
+    // Updates the given canvas context using the state stored in data.
+    var draw = function(data, context) {
+      // Updates the array associated with the canvas directly for performance reasons.
+      var canvasData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);;
+      for (var row = 0; row < data.length; row++) {
+        for (var col = 0; col < data[row].length; col++) {
+          var color = COLORS[data[row][col]];
+
+          for (var x = 0; x < CELL_SIZE; x++) {
+            for (var y = 0; y < CELL_SIZE; y++) {
+              var index = (row * CELL_SIZE * CELL_SIZE * COLS +
+                           CELL_SIZE * COLS * y +
+                           col * CELL_SIZE + x) * 4;
+              canvasData.data[index] = color.r;
+              canvasData.data[index + 1] = color.g;
+              canvasData.data[index + 2] = color.b;
+              canvasData.data[index + 3] = 255;  // Alpha.
+            }
+          }
+        }
+      }
+      context.putImageData(canvasData, 0, 0);
+    }
+    var context = createCanvas(ROWS * CELL_SIZE, COLS * CELL_SIZE);
+    // Initializes the state by creating a forest that is comprised
+    // roughly of 70% trees and 30% empty spaces.
+    var data = update(utils.create2DArray(ROWS, COLS, STATES.EMPTY),
+                      INITIAL_P_TREES, 0);
+    draw(data, context);
+    setInterval(function() {
+      data = update(data, pGrowth, pLightning);
+      draw(data, context);
+    }, 10);
+
+    var updateValue = function(id, value) {
+      var elem = document.getElementById(id);
+      if (elem) {
+        elem.innerHTML = value.toExponential(1);
+      }
+    }
+    var pGrowthSlider = document.getElementById("pGrowth");
+    if (pGrowthSlider) {
+      pGrowthSlider.value = pGrowth;
+      pGrowthSlider.onchange = function() {
+        pGrowth = parseFloat(pGrowthSlider.value);
+        updateValue("pGrowthValue", pGrowth);
+        _gaq.push(["_trackEvent", "forestFireControls", "changePGrowth",
+                   "pGrowthAsPercentageOfOnePercent",
+                   Math.floor(pGrowth * 10000)]);
+      }
+    }
+    var pLightningSlider = document.getElementById("pLightning");
+    if (pLightningSlider) {
+      pLightningSlider.value = pLightning;
+      pLightningSlider.onchange = function() {
+        pLightning = parseFloat(pLightningSlider.value);
+        updateValue("pLightningValue", pLightning);
+        _gaq.push(["_trackEvent", "forestFireControls", "changePLightning",
+                   "pLightningAsPercentageOfOnePercent",
+                   Math.floor(pLightning * 10000)]);
+      }
+    }
+    updateValue("pGrowthValue", pGrowth);
+    updateValue("pLightningValue", pLightning);
+  })();
+</script>
+<script>
+           (function () {
+                var isHidden = function (element) {
+                    return element.style.display === "none";
+                }
+                var url = document.URL.split("#")[0];
+                var boxDisplayKey = url + ".box_display";
+                var toggle = document.getElementById("toggleBox");
+                var content = document.getElementById("content");
+                if (toggle && content) {
+                    var state = window.localStorage.getItem(boxDisplayKey);
+                    if (state !== null) {
+                        content.style.display = state;
+                    }
+
+                    var updateToggleBoxLink = function () {
+                        toggle.innerHTML = (
+                            isHidden(content)
+                                ? "&laquo; Show the box."
+                                : "Hide this box. &raquo;"
+                        );
+                    }
+                    updateToggleBoxLink();
+                    toggle.onclick = function () {
+                        content.style.display = isHidden(content)
+                            ? "block"
+                            : "none";
+                        window.localStorage.setItem(boxDisplayKey, content.style.display);
+                        updateToggleBoxLink();
+                        _gaq.push([
+                            "_trackEvent", "infoBox", "toggle", "isVisible", Number(isHidden(content))
+                        ]);
+                    }
+                }
+                document.getElementsByTagName("body")[0].style.display = "block";
+            })(); 
+        </script>
+    </body>
+</html>
