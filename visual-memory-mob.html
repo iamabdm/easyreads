@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<script type="text/javascript">
+if (screen.width > 699) {
+document.location="visual-memory";
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YVB98XEM4"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-5YVB98XEM4');
+</script>
+<link rel="icon" href="https://user-images.githubusercontent.com/72780530/102049035-2a93fe80-3e06-11eb-811d-f02987233f97.png" type="image/png" sizes="32x32">
+<title>Visual Memory | Tenced</title>
+<meta name="theme-color" content="#000">
+<meta property="og:title" content="Visual Memory">
+<meta property="og:description" content="Sharpen your brain and eyes with Visual Memory">
+<meta property="og:image" content="https://1.bp.blogspot.com/-RGWmmf7St1c/X75oWO4UfPI/AAAAAAAAAeY/YhA98esF2k4diUaKwa3xHsalON1PHNbYACLcBGAsYHQ/99.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=-2.0">
+  </head>
+  <style>
+    body{overflow:hidden;background-color:#000;}
+    .content {
+    min-width:100px;
+    max-width:700px;
+    }
+    .button {
+    border-radius:10%;
+    opacity: 0.25;
+    cursor: pointer;
+    }
+    .clickable {
+    }
+    .headline {
+    text-align:center;
+    }
+    .ping {
+    color:white;
+    opacity: 0;
+    }
+    .color1 {
+    background: #398525;
+    background: -moz-linear-gradient(top, #1b92c1 0%, #1780a9 30%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1b92c1), color-stop(30%,#1780a9));
+    }
+    .left {
+    float:left;
+    }
+    .outerleft {
+    margin-left:50px;
+    }
+    .outerright {
+    margin-right:50px;
+    }
+    .outerbottom {
+    margin-bottom:50px;
+    }
+    .outertop {
+    margin-top:50px;
+    }
+    .marginright {
+    float:left;
+    margin-right:2%;
+    }
+    .margintop {
+    margin-top:2%;
+    }
+    .textcolor {
+    color:white;
+    }
+    .button_container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 30%;
+    }
+    .btn {
+    border: none;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    background-color: #222;
+    padding: 17px 60px;
+    margin: 0 auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.20);
+    }
+    .btn span {
+    position: relative; 
+    z-index: 1;
+    }
+    .btn:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 490%;
+    width: 140%;
+    background: #78c7d2;
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+    -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
+    transform: translateX(-98%) translateY(-25%) rotate(45deg);
+    }
+    .btn:hover:after {
+    -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+    transform: translateX(-9%) translateY(-25%) rotate(45deg);
+    }
+  </style>
+  <div class="content">
+  <div style=" background-color:black; float:left; border-radius:25px;">
+    <h1 id="head" class="headline textcolor">Visual Memory</h1>
+    <h3 id="level" class="textcolor headline">3 blocks</h3>
+    <button class="btn" id="begin"><span>Tap Here To Begin</span></button>
+    <h3 id="ping" class="headline ping">&#10004;</h3>
+    <div id="square" class="outerleft outerright outerbottom outertop" style="height:400px; width:400px; background-color:black;"></div>
+  </div>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script>
+    $(document).ready(function(){
+    function size (num) {
+    var spacers = num-1;
+    var spacersTotal = 2*spacers;
+    var buttonAvailableSpace = 100-spacersTotal;
+    var buttonDimensions = buttonAvailableSpace/num;
+    var buttonDimensionsRounded = Math.floor(buttonDimensions *100)/100;
+    return [buttonDimensionsRounded, +spacers];
+    }
+    var level = 0;
+    var numcorrect = 0;
+    var arr = [];
+    var clickable = false;
+    var strikes = "";
+    function vars (cor) {
+    $("#begin").css("opacity", "0");
+    clickable = false;
+    $( ".button" ).remove();
+    if (cor === "start") {
+    level = 3;
+    }
+    if (cor === "increase") {
+    level++;
+    }
+    if (cor === "decrease") {
+    level--;
+    }
+    arr = [];
+    numcorrect = 0;
+    var i = 1;
+    while (i*i/2 < level) {
+    i++;
+    }
+    setTiles(i);
+    $("#level").text(level+" blocks");
+    }
+    function setTiles (num) {
+    var square = num*num;
+    var right = "marginright";
+    var top = ""
+    for (var i = 1; i < square+1; i++){
+    right = "marginright";
+    if (i % num === 0) {
+    right = "";
+    }
+    if (i > num) {
+    top = "margintop";
+    }
+    $("#square").append('<div id="b'+i+'" class="button clickable color1  left '+right+' '+top+'"></div>');
+    }
+    $(".button").css('height', size(num)[0]+'%');
+    $(".button").css('width', size(num)[0]+'%');
+    create(square);
+    }
+    function shuffle (num) {
+    var o = [];
+    for (var i = 1; i <num+1; i++) {
+    o.push("#b"+i);
+    }
+    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+    };
+    function create (num) {
+    arr = shuffle(num);
+    arr = arr.slice(0,level);
+    for (var i = 0; i < level+1; i++) {
+    display(arr[i]);
+    }
+    }
+    function display (div) {
+    
+      $( div ).animate({
+        opacity: 1,
+      }, 1000, function() {
+     $( div ).animate({
+        opacity: 0.25,
+    }, 1000, function() {
+    });
+    });
+    setTimeout(function(){
+    clickable = true;
+    }, 2000);
+    }
+    $(document).delegate('.clickable', 'click', function() {
+    if (clickable === true) {
+    var id = $(this).attr('id');
+    $(this).removeClass("clickable");
+    check (arr, id);
+    }
+    });
+    function check (array, click) {
+    var loc = array.indexOf("#"+click);
+    if (loc >= 0) {
+    $("#"+click).css("opacity", "1");
+    numcorrect++;
+    if (numcorrect === arr.length) {
+    correctping ();
+    setTimeout(function(){
+    vars ("increase");
+    }, 300);
+    }
+    } else {
+    strikes = strikes+"✖";
+    incorrectping ();
+    if (strikes === "✖✖✖") {
+    restart();
+    } else {
+    setTimeout(function(){
+    vars ("decrease");
+    }, 300);
+    }
+    }
+    }
+    function correctping () {
+    $("#ping").css("color","green");
+    $("#ping").text("✓");
+    
+    $( "#ping" ).animate({
+        opacity: 1,
+      }, 145, function() {
+     $( "#ping" ).animate({
+        opacity: 0.0,
+      }, 145, function() {
+    
+      });
+      });
+    }
+    function incorrectping () {
+    $("#ping").css("color","red");
+    $("#ping").text(strikes);
+    
+    $( "#ping" ).animate({
+        opacity: 1,
+      }, 145, function() {
+     $( "#ping" ).animate({
+        opacity: 0.0,
+    }, 145, function() {
+    });
+    });
+    }
+    function restart() {
+    var num = 3;
+    level = 3;
+    numcorrect = 0;
+    arr = [];
+    clickable = false;
+    strikes = "";
+    $( ".button" ).remove();
+    $("#level").text(level+" blocks");
+    $("#begin").css("opacity", "1");
+    var square = num*num;
+    var right = "marginright";
+    var top = ""
+    for (var i = 1; i < square+1; i++){
+    right = "marginright";
+    if (i % num === 0) {
+    right = "";
+    }
+    if (i > num) {
+    top = "margintop";
+    }
+    $("#square").append('<div id="b'+i+'" class="button clickable color1  left '+right+' '+top+'"></div>');
+    }
+    $(".button").css('height', size(num)[0]+'%');
+    $(".button").css('width', size(num)[0]+'%');
+    }
+    restart();
+    $( "#begin" ).click(function() {
+    if (clickable === false) {
+    vars ("start");
+    }
+    });
+    function startButton () {
+    $("#begin").css("opacity", "0");
+    vars ("start");
+    }
+    });
+  </script>
+  </body>
+</html>
