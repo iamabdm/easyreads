@@ -21,6 +21,7 @@
 </head>
 <body>
 <header class="navbar navbar-expand-md navbar-dark bd-navbar">
+ <a class="skip-link" href='#main'>Skip to content</a>
 <nav class="container-xxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
 <a class="navbar-brand p-0 me-2" href="/tenced" aria-label="Tenced">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="70" height="70" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
@@ -75,12 +76,13 @@ randomlinks[11]="forest-fire-management";
 randomlinks[12]="golden-ratio-circles";
 randomlinks[13]="periodic-table";
 function randomlink(){window.open(randomlinks[Math.floor(Math.random()*randomlinks.length)]);
-}
-</script>
+}</script>
 <style type="text/css">
 body{overflow:hidden}a{cursor:pointer}
 body,div,html,iframe{margin:0;padding:0;height:100%}iframe{display:block;width:100%;border:none}
+.skip-link {color: #fff;font-weight: 700;left: 50%;padding: 4px;position: absolute;transform: translateY(-100%);z-index:-1;
+}
 </style>
-<iframe title="home" src="home"></iframe>
+<iframe id="main" title="home" src="home"></iframe>
 </body>
 </html>
