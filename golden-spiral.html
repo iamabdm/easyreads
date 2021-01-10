@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="utf-8">
 <script type="text/javascript">
 if (screen.width<=699) {
 document.location="golden-spiral-mob";
@@ -15,6 +16,9 @@ gtag('config', 'G-5YVB98XEM4');
 </script>
 <link rel="icon" href="https://user-images.githubusercontent.com/72780530/102049035-2a93fe80-3e06-11eb-811d-f02987233f97.png" type="image/png" sizes="32x32">
 <title>Golden Spiral | Tenced</title>
+<meta name="title" content="Golden Spiral | Tenced">
+<meta name="description" content="Golden Spiral">
+<meta name="keywords" content="Golden Spiral">
 <meta property="og:title" content="Golden Spiral">
 <meta property="og:description" content="See Golden Spiral">
 <meta property="og:image" content="https://1.bp.blogspot.com/-rOsMYK2YmU4/X75oVLq_H-I/AAAAAAAAAeM/konlaY7B0koyqjgTQNFe8W-oMEuaJj4OwCLcBGAsYHQ/77.webp">
@@ -120,7 +124,6 @@ function drawArc(x, y, height, level) {
   let c = b / golden;
   let e = a - c;
   let d = e / golden;
-
   if (drawSquares) {
     stroke(20, 5);
     rect(x, y, a, height);
