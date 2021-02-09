@@ -19,75 +19,17 @@ gtag('config', 'G-5YVB98XEM4');
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
-            html {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-            }
-
-            body {
-                display: none;
-                overflow: hidden;
-                font-family: sans-serif;
-            }
-
-            #box {
-                background-color: lightgoldenrodyellow;
-                border: 1px solid lightgrey;
-                bottom: 0;
-                position: absolute;
-                right: 0;
-                width: 420px;
-                z-index: 1;
-            }
-
-            #content {
-                padding: 15px;
-            }
-
-            #content p {
-                margin-top: 0;
-            }
-
-            #button a {
-                display: block;
-                padding: 15px;
-                border-bottom: 1px solid lightgrey;
-            }
-
-            table {
-                border-collapse: separate;
-            }
-
-            td {
-                padding: 15px 0 15px 15px;
-            }
-
-            th {
-                text-align: left;
-                padding: 15px 15px 15px 0;
-                border-right: 1px solid lightgrey;
-            }
-
-            #c {
-                left: 0;
-                position: absolute;
-                top: 0;
-                z-index: 0;
-            }
-
-            a {
-                color: blue;
-                text-decoration: none;
-            }
-::-moz-selection {
-  color:#fff;
-  background:#008000;
-}
-::selection {
-  color:#fff;
-  background:#008000;
-}
+html{width: 100%;height: 100%;margin: 0;}
+body {display: none;overflow: hidden;font-family: sans-serif;}
+#box {background-color: lightgoldenrodyellow;border: 1px solid lightgrey;bottom: 0;position: absolute;right: 0;width: 420px;z-index: 1;}
+#content {padding: 15px;}
+#content p {margin-top: 0;}
+#button a {display: block;padding: 15px;border-bottom: 1px solid lightgrey;}
+table{border-collapse: separate;}
+td{padding: 15px 0 15px 15px;}th{text-align: left;padding: 15px 15px 15px 0;border-right: 1px solid lightgrey;}
+#c{left: 0;position: absolute;top: 0;z-index: 0;}
+a {color: blue;text-decoration: none;}
+::-moz-selection {color:#fff;background:#008000;}::selection {color:#fff;background:#008000;}
 </style>
 <script> 
       var utils = {
@@ -101,9 +43,7 @@ gtag('config', 'G-5YVB98XEM4');
           }
           return res;
         },
-
-
-        mod: function(n, p) {
+mod: function(n, p) {
           if (n < 0) {
             return p + n % p;
           } else {
@@ -112,15 +52,10 @@ gtag('config', 'G-5YVB98XEM4');
         },
       };
     </script>
-
-    <body>
-        <div id="box">
-  <div id="button">
-    <a href="#" id="toggleBox"></a>
-  </div>
-
-  <div id="content">
-<p>
+<body>
+<noscript><h1 style="font-family:system-ui;text-align:center;position:fixed;top:40%;left:50%;transform:translate(-50%,-50%)">Please enable javascript on your browser.</h1></noscript>
+<div id="box"><div id="button"><a href="#" id="toggleBox"></a></div>
+<div id="content"><p>
 The green cells are trees, the black cells are empty spaces, and the red cells are trees that are on fire. Fires are started through <a href="http://en.wikipedia.org/wiki/Wildfire#Causes">lightning</a>. When a tree is on fire, it will die and spread the fire to trees in its <a href="http://en.wikipedia.org/wiki/Moore_neighborhood">Moore neighborhood</a> in the next step.
 </p>
 <p>
@@ -149,7 +84,6 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
     </table>
   </div>
 </div>
-
 <canvas id="c">
   <p>
     It looks like your browser
@@ -157,8 +91,6 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
     support.
   </p>
 </canvas>
-
-
 <script type="text/javascript">
   (function() {
 
@@ -170,36 +102,25 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
       }
       return {r: r, g: g, b: b};
     }
-
-    var CELL_SIZE = 8;
-
-    // States.
-    var STATES = {
+var CELL_SIZE = 8;
+var STATES = {
       EMPTY: 0,
       TREE: 1,
-      BURNING: 2,
-    };
-
-    var COLORS = {};
+      BURNING: 2,};
+var COLORS = {};
     COLORS[STATES.EMPTY] = rgb(0, 0, 0);
     COLORS[STATES.TREE] = rgb(0, 255, 0);
     COLORS[STATES.BURNING] = rgb(255, 0, 0);
-
-    var ROWS = Math.ceil(window.innerHeight / CELL_SIZE);
+   var ROWS = Math.ceil(window.innerHeight / CELL_SIZE);
     var COLS = Math.ceil(window.innerWidth / CELL_SIZE);
-
-    var INITIAL_P_TREES = 0.4;
+   var INITIAL_P_TREES = 0.4;
     var pGrowth = 5e-3;
     var pLightning = 1e-5;
-
-    var NEIGHBORS = [
+ var NEIGHBORS = [
       [-1, -1], [+0, -1], [+1, -1],
       [-1, +0], /* :-) */ [+1, +0],
       [-1, +1], [+0, +1], [+1, +1],
     ];
-
-    // Returns true any trees in the 8-neighborhood of (row, col) are
-    // on fire.
     var neighborhoodOnFire = function(data, row, col) {
       for (var i = 0; i < NEIGHBORS.length; i++) {
         var neighborRow = utils.mod(row + NEIGHBORS[i][1], data.length);
@@ -210,9 +131,6 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
       }
       return false;
     }
-    // Executes one step of the system with the given
-    // probabilities. The input array is not modified. A new array
-    // containing the modifications is returned.
     var update = function(data, pGrowth, pLightning) {
       if (data.length === 0) {
         return [];
@@ -222,8 +140,7 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
         for (var col = 0; col < data[row].length; col++) {
           var currentState = data[row][col];
           var newState = STATES.EMPTY;
-
-          switch (currentState) {
+         switch (currentState) {
             case STATES.EMPTY:
               newState = Math.random() < pGrowth ? STATES.TREE : STATES.EMPTY;
               break;
@@ -244,7 +161,6 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
       }
       return newData;
     }
-    // Creates a new canvas and returns its context.
     var createCanvas = function(height, width) {
       var canvas = document.getElementById("c");
       var context = canvas.getContext("2d");
@@ -252,7 +168,6 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
       context.canvas.width = width;
       return context;
     }
-    // Updates the given canvas context using the state stored in data.
     var draw = function(data, context) {
       // Updates the array associated with the canvas directly for performance reasons.
       var canvasData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);;
@@ -276,8 +191,6 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
       context.putImageData(canvasData, 0, 0);
     }
     var context = createCanvas(ROWS * CELL_SIZE, COLS * CELL_SIZE);
-    // Initializes the state by creating a forest that is comprised
-    // roughly of 70% trees and 30% empty spaces.
     var data = update(utils.create2DArray(ROWS, COLS, STATES.EMPTY),
                       INITIAL_P_TREES, 0);
     draw(data, context);
@@ -332,8 +245,7 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
                     if (state !== null) {
                         content.style.display = state;
                     }
-
-                    var updateToggleBoxLink = function () {
+var updateToggleBoxLink = function () {
                         toggle.innerHTML = (
                             isHidden(content)
                                 ? "&laquo; Show the box."
