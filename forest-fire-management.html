@@ -21,43 +21,6 @@ gtag('config', 'G-5YVB98XEM4');
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!---inspired by aryan.app--->
 </head>
-<style>
-html{width: 100%;height: 100%;margin: 0;}
-body{display: none;overflow: hidden;font-family: sans-serif;}
-#box {background-color: lightgoldenrodyellow;border: 1px solid lightgrey;bottom: 0;position: absolute;right: 0;width: 420px;z-index: 1;}
-#content{padding: 15px;}
-#content p {margin-top: 0;}
-#button a {display: block;padding: 15px;border-bottom: 1px solid lightgrey;}
-table {border-collapse: separate;}
-td {padding: 15px 0 15px 15px;}
-th {text-align: left;padding: 15px 15px 15px 0;border-right: 1px solid lightgrey;}
-#c {left: 0;position: absolute;top: 0;z-index: 0;}
-a { color: blue;text-decoration: none;}
-::-moz-selection {color:#fff;background:#008000;}::selection {color:#fff;background:#008000;}
-</style>
-<script> 
-      var utils = {
-        create2DArray: function(rows, cols, initVal) {
-          var res = new Array(rows);
-          for (var row = 0; row < rows; row++) {
-            res[row] = new Array(cols);
-            for (var col = 0; col < cols; col++) {
-        res[row][col] = initVal;
-            }
-          }
-          return res;
-        },
-
-
-        mod: function(n, p) {
-          if (n < 0) {
-            return p + n % p;
-          } else {
-            return n % p;
-          }
-        },
-      };
-    </script>
 <body>
 <noscript><h1 style="font-family:system-ui;text-align:center;position:fixed;top:40%;left:50%;transform:translate(-50%,-50%)">Please enable javascript on your browser.</h1></noscript>
 <div id="box">
@@ -94,7 +57,6 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
     </table>
   </div>
 </div>
-
 <canvas id="c">
   <p>
     It looks like your browser
@@ -102,11 +64,43 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
     support.
   </p>
 </canvas>
-
-
+<style>
+html{width: 100%;height: 100%;margin: 0;}
+body{display: none;overflow: hidden;font-family: sans-serif;}
+#box {background-color: lightgoldenrodyellow;border: 1px solid lightgrey;bottom: 0;position: absolute;right: 0;width: 420px;z-index: 1;}
+#content{padding: 15px;}
+#content p {margin-top: 0;}
+#button a {display: block;padding: 15px;border-bottom: 1px solid lightgrey;}
+table {border-collapse: separate;}
+td {padding: 15px 0 15px 15px;}
+th {text-align: left;padding: 15px 15px 15px 0;border-right: 1px solid lightgrey;}
+#c {left: 0;position: absolute;top: 0;z-index: 0;}
+a { color: blue;text-decoration: none;}
+::-moz-selection {color:#fff;background:#008000;}::selection {color:#fff;background:#008000;}
+</style>
+<script> 
+      var utils = {
+        create2DArray: function(rows, cols, initVal) {
+          var res = new Array(rows);
+          for (var row = 0; row < rows; row++) {
+            res[row] = new Array(cols);
+            for (var col = 0; col < cols; col++) {
+        res[row][col] = initVal;
+            }
+          }
+          return res;
+        },
+       mod: function(n, p) {
+          if (n < 0) {
+            return p + n % p;
+          } else {
+            return n % p;
+          }
+        },
+      };
+</script>
 <script type="text/javascript">
   (function() {
-
     var rgb = function(r, g, b) {
       for (var i = 0; i < arguments.length; i++) {
         if (arguments[i] < 0 || arguments[i] > 255) {
@@ -124,8 +118,7 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
       TREE: 1,
       BURNING: 2,
     };
-
-    var COLORS = {};
+   var COLORS = {};
     COLORS[STATES.EMPTY] = rgb(0, 0, 0);
     COLORS[STATES.TREE] = rgb(0, 255, 0);
     COLORS[STATES.BURNING] = rgb(255, 0, 0);
