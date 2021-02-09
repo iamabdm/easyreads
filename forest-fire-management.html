@@ -22,75 +22,18 @@ gtag('config', 'G-5YVB98XEM4');
 <!---inspired by aryan.app--->
 </head>
 <style>
-            html{
-                width: 100%;
-                height: 100%;
-                margin: 0;
-            }
-  
-            body {
-                display: none;
-                overflow: hidden;
-	        font-family: sans-serif;
-            }
-
-            #box {
-                background-color: lightgoldenrodyellow;
-                border: 1px solid lightgrey;
-                bottom: 0;
-                position: absolute;
-                right: 0;
-                width: 420px;
-                z-index: 1;
-            }
-
-            #content {
-                padding: 15px;
-            }
-
-            #content p {
-                margin-top: 0;
-            }
-
-            #button a {
-                display: block;
-                padding: 15px;
-                border-bottom: 1px solid lightgrey;
-            }
-
-            table {
-                border-collapse: separate;
-            }
-
-            td {
-                padding: 15px 0 15px 15px;
-            }
-
-            th {
-                text-align: left;
-                padding: 15px 15px 15px 0;
-                border-right: 1px solid lightgrey;
-            }
-
-            #c {
-                left: 0;
-                position: absolute;
-                top: 0;
-                z-index: 0;
-            }
-
-            a {
-                color: blue;
-                text-decoration: none;
-            }
-::-moz-selection {
-  color:#fff;
-  background:#008000;
-}
-::selection {
-  color:#fff;
-  background:#008000;
-}
+html{width: 100%;height: 100%;margin: 0;}
+body{display: none;overflow: hidden;font-family: sans-serif;}
+#box {background-color: lightgoldenrodyellow;border: 1px solid lightgrey;bottom: 0;position: absolute;right: 0;width: 420px;z-index: 1;}
+#content{padding: 15px;}
+#content p {margin-top: 0;}
+#button a {display: block;padding: 15px;border-bottom: 1px solid lightgrey;}
+table {border-collapse: separate;}
+td {padding: 15px 0 15px 15px;}
+th {text-align: left;padding: 15px 15px 15px 0;border-right: 1px solid lightgrey;}
+#c {left: 0;position: absolute;top: 0;z-index: 0;}
+a { color: blue;text-decoration: none;}
+::-moz-selection {color:#fff;background:#008000;}::selection {color:#fff;background:#008000;}
 </style>
 <script> 
       var utils = {
@@ -115,14 +58,13 @@ gtag('config', 'G-5YVB98XEM4');
         },
       };
     </script>
-
-    <body>
-        <div id="box">
-  <div id="button">
-    <a href="#" id="toggleBox"></a>
-  </div>
-
-  <div id="content">
+<body>
+<noscript><h1 style="font-family:system-ui;text-align:center;position:fixed;top:40%;left:50%;transform:translate(-50%,-50%)">Please enable javascript on your browser.</h1></noscript>
+<div id="box">
+<div id="button">
+<a href="#" id="toggleBox"></a>
+</div>
+<div id="content">
 <p>
 The green cells are trees, the black cells are empty spaces, and the red cells are trees that are on fire. Fires are started through <a href="http://en.wikipedia.org/wiki/Wildfire#Causes">lightning</a>. When a tree is on fire, it will die and spread the fire to trees in its <a href="http://en.wikipedia.org/wiki/Moore_neighborhood">Moore neighborhood</a> in the next step.
 </p>
@@ -187,15 +129,12 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
     COLORS[STATES.EMPTY] = rgb(0, 0, 0);
     COLORS[STATES.TREE] = rgb(0, 255, 0);
     COLORS[STATES.BURNING] = rgb(255, 0, 0);
-
-    var ROWS = Math.ceil(window.innerHeight / CELL_SIZE);
-    var COLS = Math.ceil(window.innerWidth / CELL_SIZE);
-
-    var INITIAL_P_TREES = 0.4;
-    var pGrowth = 5e-3;
-    var pLightning = 1e-5;
-
-    var NEIGHBORS = [
+var ROWS = Math.ceil(window.innerHeight / CELL_SIZE);
+var COLS = Math.ceil(window.innerWidth / CELL_SIZE);
+var INITIAL_P_TREES = 0.4;
+var pGrowth = 5e-3;
+var pLightning = 1e-5;
+var NEIGHBORS = [
       [-1, -1], [+0, -1], [+1, -1],
       [-1, +0], /* :-) */ [+1, +0],
       [-1, +1], [+0, +1], [+1, +1],
@@ -213,8 +152,7 @@ For a given step, P<sub>growth</sub> is the probability of a tree growing in an 
       }
       return false;
     }
-
-    // Executes one step of the system with the given
+ // Executes one step of the system with the given
     // probabilities. The input array is not modified. A new array
     // containing the modifications is returned.
     var update = function(data, pGrowth, pLightning) {
